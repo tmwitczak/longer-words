@@ -14,8 +14,8 @@ class EnemyManager
     void SpawnEnemyAtRandomLocation(int wave)
     {
         // Set ranges
-        const float rangeMin = 5;
-        const float rangeMax = 10;
+        const float rangeMin = 5.5f;
+        const float rangeMax = 7.5f;
 
         Vector3 randomLocation =
             Quaternion.Euler(0, Random.Range(0, 360), 0)
@@ -26,7 +26,8 @@ class EnemyManager
         GameObject enemy = Instantiate(enemyPrefab,
                         GameObject.Find("Player").transform.position + randomLocation,
                         Quaternion.identity);
-        enemy.GetComponent<Enemy>().velocity = 1500 + wave * 500;
+        enemy.GetComponent<Enemy>().health = 100.0f + 25.0f * Random.Range(0, wave);
+        enemy.GetComponent<Enemy>().velocity = 1500 + wave * 125;
         enemies.Add(enemy);
 
         // enemies[enemies.Count - 1].command =

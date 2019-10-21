@@ -66,7 +66,7 @@ class Enemy
         commandText.transform.parent = GameObject.Find("Canvas").transform;
         commandText.text = commands.locate;
 
-        healthUI = Instantiate(uiTextPrefab,
+        healthUI = Instantiate(uiTextPrefabSmall,
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
         healthUI.transform.parent = GameObject.Find("Canvas").transform;
         healthUI.text = health.ToString();
@@ -120,7 +120,7 @@ class Enemy
             commandText.text += "<color=";
             if (letterStatus[i])
             {
-                commandText.text += "green";
+                commandText.text += "#747E80";
                 light.intensity += 0.25f;
                 correctLetters++;
             }
@@ -128,11 +128,11 @@ class Enemy
             {
                 if (i > gameplayManager.currentCommand.Length - 1)
                 {
-                    commandText.text += "white";
+                    commandText.text += "#f7f3e8";
                 }
                 else
                 {
-                    commandText.text += "red";
+                    commandText.text += "#F2583E";
                     light.intensity -= 0.125f;
                     notcorrectletters++;
                 }
@@ -144,11 +144,22 @@ class Enemy
             commandText.text += "</color>";
         }
 
+        if (gameplayManager.mode == GameplayManager.Mode.Attack &&correctLetters == commands.attack.Length) {
+            gameplayManager.allWordCorrect = true;
+        }
+
+        if (gameplayManager.mode == GameplayManager.Mode.Attack && correctLetters == 0 && notcorrectletters == 0) {
+            gameplayManager.emptyWord = true;
+        }
+        else {
+            gameplayManager.emptyWord = false;
+        }
+
         // Render the UI
         Vector3 uiPos = Camera.main.WorldToScreenPoint(this.transform.position);
-        commandText.transform.position = uiPos;
+        commandText.transform.position = uiPos + new Vector3(0, 0, 1);
         healthUI.transform.position = uiPos + new Vector3(0, 50, 0);
-        healthUI.color = Color.red;
+        healthUI.color = new Color(0.95f, 0.35f, 0.24f);
 
         if (destroy)
         {
@@ -170,7 +181,7 @@ class Enemy
             commandText.text = "";
         }
 
-        healthUI.text = "HP: " + ((int)health).ToString();
+        healthUI.text = "(" + ((int)health).ToString() + ")";
 
 
         if (health <= 0.0f)
@@ -217,6 +228,7 @@ class Enemy
     // ------------------------------------------- Data << --==//
     // .............. Accessible from Unity's editor <<< ..--==//
     [SerializeField] private GameObject uiTextPrefab;
+    [SerializeField] private GameObject uiTextPrefabSmall;
     [SerializeField] public float velocity;
 
     // .................................. Components <<< ..--==//
@@ -233,7 +245,7 @@ class Enemy
 
     Light light;
 
-    float health = 100.0f;
+    public float health = 100.0f;
 
 }
 

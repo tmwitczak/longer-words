@@ -177,8 +177,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireballPre: {fileID: 7838848191871989181, guid: 0d23267328337924dba8de5639275ed3,
     type: 3}
-  velocity: 3000
-  uiTextPrefab: {fileID: 2716712077969970057, guid: 9459cc4263696504092b735675dd114b,
+  velocity: 100
+  uiTextPrefab: {fileID: 5510089077692051724, guid: 7e5dcc6150487ba4d93350e18f5596e4,
     type: 3}
 --- !u!54 &8007126539610444468
 Rigidbody:

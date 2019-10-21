@@ -40,7 +40,7 @@ class Player
 
     public void Move(Vector3 force)
     {
-        rigidbody.AddForce(velocity * force);
+        rigidbody.AddForce(velocity * force.normalized);
     }
 
     public void Attack(GameObject enemy)
@@ -60,16 +60,16 @@ class Player
 
     void Update()
     {
-        health += 5 * Time.deltaTime;
+        health += 1.0f * Time.deltaTime;
         if (health >= 100) health = 100;
 
-        GameObject.Find("Directional Light").GetComponent<Light>()
-             .intensity = health / 100;
-        GameObject.Find("Directional Light").transform.rotation =
-            Quaternion.Euler(10 + (75 * (100 - health) / 100), -135, 0);
+        // GameObject.Find("Point Light").GetComponent<Light>()
+        //      .intensity = health / 100;
+        // GameObject.Find("Point Light").transform.rotation =
+        //     Quaternion.Euler(10 + (75 * (100 - health) / 100), -135, 0);
 
 
-        healthUI.text = "HP: " + ((int)health).ToString();
+        healthUI.text = "(" + ((int)health).ToString() + ")";
 
         if (health <= 0)
         {
@@ -80,7 +80,7 @@ class Player
         // Render the UI
         Vector3 uiPos = Camera.main.WorldToScreenPoint(this.transform.position);
         healthUI.transform.position = uiPos + new Vector3(0, 75, 0);
-        healthUI.color = Color.green;
+        healthUI.color = new Color(0.45f, 0.75f, 0.82f);
     }
 
     void OnCollisionStay(Collision collision)
