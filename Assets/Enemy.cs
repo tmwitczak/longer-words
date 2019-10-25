@@ -87,7 +87,7 @@ class Enemy
 
         // Check and update command UI
         string currentCommand = "";
-        if (gameplayManager.mode == GameplayManager.Mode.Locate)
+        if (gameplayManager.mode == GameplayManager.Mode.MoveAndLocate)
         {
             currentCommand = commands.locate;
         }
@@ -110,11 +110,12 @@ class Enemy
         }
         commandText.text = "";
         light.intensity = 0;
-        if (gameplayManager.mode != GameplayManager.Mode.Move)
-        {
+
+        if (gameplayManager.mode == GameplayManager.Mode.Attack) {
             correctLetters = 0;
             notcorrectletters = 0;
         }
+
         for (int i = 0; i < currentCommand.Length; i++)
         {
             commandText.text += "<color=";
@@ -163,7 +164,7 @@ class Enemy
 
         if (destroy)
         {
-            if (gameplayManager.mode == GameplayManager.Mode.Locate)
+            if (gameplayManager.mode == GameplayManager.Mode.MoveAndLocate)
             {
                 gameplayManager.enemyTargeted(gameObject);
             }
@@ -174,8 +175,7 @@ class Enemy
             }
         }
 
-        if (gameplayManager.mode == GameplayManager.Mode.Move
-        || (gameplayManager.mode == GameplayManager.Mode.Attack
+        if ((gameplayManager.mode == GameplayManager.Mode.Attack
             && gameplayManager.target != this.gameObject))
         {
             commandText.text = "";

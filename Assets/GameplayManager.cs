@@ -39,51 +39,45 @@ class GameplayManager
         }
 
         // Get input
-        if (mode == Mode.Locate || mode == Mode.Attack)
+        foreach (char c in Input.inputString)
         {
-            foreach (char c in Input.inputString)
+            if (c == '\b' && command.Length != 0)
             {
-                if (c == '\b' && command.Length != 0)
-                {
-                    command = command.Substring(0, command.Length - 1);
-                }
-                else if (c != ' ')
-                {
+                command = command.Substring(0, command.Length - 1);
+            }
+            else if (c != ' ')
+            {
+                if ((mode == Mode.MoveAndLocate && c >= '0' && c <= '9')
+                || mode == Mode.Attack) {
                     command += c;
-                }
-
-                if (c == ' ' || Input.GetKey(KeyCode.Return))
-                {
-                    if (mode == Mode.Locate)
-                    {
-                        mode = Mode.Move;
-                    }
-                    else if (mode == Mode.Attack)
-                    {
-                        if (!emptyWord)
-                        {
-                            player.Attack(target);
-                        }
-                        mode = Mode.Move;
-                        command = "";
-                    }
                 }
             }
 
-            if (mode == Mode.Attack && allWordCorrect) {
-                if (!emptyWord)
+            if (c == ' ' || Input.GetKey(KeyCode.Return))
+            {
+                if (mode == Mode.Attack)
                 {
-                    player.Attack(target);
+                    if (!emptyWord)
+                    {
+                        player.Attack(target);
+                    }
+                    mode = Mode.MoveAndLocate;
+                    command = "";
                 }
-                mode = Mode.Move;
-                command = "";
-                allWordCorrect = false;
             }
         }
 
-        else if (mode == Mode.Move)
-        {
+        if (mode == Mode.Attack && allWordCorrect) {
+            if (!emptyWord)
+            {
+                player.Attack(target);
+            }
+            mode = Mode.MoveAndLocate;
             command = "";
+            allWordCorrect = false;
+        }
+        else if (mode == Mode.MoveAndLocate)
+        {
             Vector3 direction = Vector3.zero;
 
             if (Input.GetAxis("Vertical") > 0)
@@ -103,25 +97,13 @@ class GameplayManager
                 direction += Vector3.right;
             }
             player.Move(Time.deltaTime * direction.normalized);
-
-            foreach (char c in Input.inputString)
-            {
-                if (c == ' ' || Input.GetKey(KeyCode.Return))
-                {
-                    mode = Mode.Locate;
-                }
-            }
         }
 
         // UI
         waveText.text = "Level " + waveNumber.ToString();
-        if (mode == Mode.Move)
+        if (mode == Mode.MoveAndLocate)
         {
-            waveText.text += " <i>| Move</i>"; 
-        }
-        if (mode == Mode.Locate)
-        {
-            waveText.text += " <i>| Locate</i>";
+            waveText.text += " <i>| Move and locate</i>"; 
         }
         if (mode == Mode.Attack)
         {
@@ -131,13 +113,9 @@ class GameplayManager
         waveText.color = new Color(0.97f, 0.95f, 0.91f);
 
         tutorialText.text = "";
-        if (mode == Mode.Move)
+        if (mode == Mode.MoveAndLocate)
         {
-            tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nPress <b>Space</b> to locate the enemy"; 
-        }
-        if (mode == Mode.Locate)
-        {
-            tutorialText.text += "Enter chosen enemy's number to locate him\nPress <b>Space</b> to leave and move again"; 
+            tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nEnter chosen enemy's number to locate him";
         }
         if (mode == Mode.Attack)
         {
@@ -160,7 +138,7 @@ class GameplayManager
     public void enemyKilled()
     {
         command = "";
-        mode = Mode.Move;
+        mode = Mode.MoveAndLocate;
     }
 
     public string currentCommand
@@ -179,14 +157,14 @@ class GameplayManager
 
     public enum Mode
     {
-        Move, Locate, Attack
+        MoveAndLocate, Attack
     }
 
     public bool allWordCorrect = false;
     public bool emptyWord = false;
 
     public
-    Mode mode = Mode.Move;
+    Mode mode = Mode.MoveAndLocate;
 
     public
     string command;
