@@ -1,95 +1,75 @@
-﻿// //////////////////////////////////////////////////// Usings //
+﻿// ////////////////////////////////////////////////////////////// Usings //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-// ///////////////////////////////////////////// Class: Player //
-public
-class Player
-        : MonoBehaviour
-{
-    // ============================ Private implementation < ==//
-    // -------------------------------------- Behaviour << --==//
-    // .............................. Initialization <<< ..--==//
-    private void Awake()
-    {
+// /////////////////////////////////////////////////////// Class: Player //
+public class Player : MonoBehaviour {
+    // ============================================ Public interface < ==//
+    // ------------------------------------------------ Behaviour << --==//
+    public void Move(Vector3 force) {
+        rigidbody.AddForce(velocity * force.normalized);
+    }
+    public void Attack(Transform enemy) {
+        Vector3 direction = (enemy.position - transform.position)
+                            .normalized;
+        GameObject fireball = Instantiate(fireballPrefab,
+                                          transform.position,
+                                          Quaternion.identity);
+        Physics.IgnoreCollision(GetComponent<Collider>(),
+                                fireball.GetComponent<Collider>());
+        fireball.GetComponent<Rigidbody>().velocity = 1000.0f * direction 
+                                                      * Time.deltaTime;
+    }
+    // ====================================== Private implementation < ==//
+    // ------------------------------------------------ Behaviour << --==//
+    // ........................................ Initialization <<< ..--==//
+    private void Awake() {
         SetupReferencesToComponents();
     }
-
-    void SetupReferencesToComponents()
-    {
+    private void SetupReferencesToComponents() {
         rigidbody = GetComponent<Rigidbody>();
     }
-
-    void Start()
-    {
-        healthUI = Instantiate(uiTextPrefab,
-                new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
+    private void Start() {
+        healthUI = Instantiate(uiTextPrefab, new Vector3(0, 0, 0),
+                               Quaternion.identity).GetComponent<Text>();
         healthUI.transform.parent = GameObject.Find("Canvas").transform;
         healthUI.text = health.ToString();
     }
-
-    // ------------------------------------------- Data << --==//
-    // .................................. Components <<< ..--==//
-    private new Rigidbody rigidbody;
-    [SerializeField] public GameObject fireballPre;
-
-
-    [SerializeField] public float velocity;
-
-    public void Move(Vector3 force)
-    {
-        rigidbody.AddForce(velocity * force.normalized);
-    }
-
-    public void Attack(GameObject enemy)
-    {
-        Vector3 direction = (enemy.transform.position
-             - transform.position).normalized;
-
-        GameObject fireball = Instantiate(fireballPre,
-            this.transform.position, Quaternion.identity);
-        Physics.IgnoreCollision(this.GetComponent<Collider>(), fireball.GetComponent<Collider>());
-        fireball.GetComponent<Rigidbody>().velocity = direction * 1000 * Time.deltaTime;
-    }
-
-    [SerializeField] private GameObject uiTextPrefab;
-    private Text healthUI;
-    float health = 100;
-
-    void Update()
-    {
-        health += 1.0f * Time.deltaTime;
-        if (health >= 100) health = 100;
-
-        // GameObject.Find("Point Light").GetComponent<Light>()
-        //      .intensity = health / 100;
-        // GameObject.Find("Point Light").transform.rotation =
-        //     Quaternion.Euler(10 + (75 * (100 - health) / 100), -135, 0);
-
-
+    // ........................................... Update loop <<< ..--==//
+    void Update() {
+        // '''''''''''''''''''''''''''''''''''''''''''''' Regenerate health
+        health = Mathf.Clamp(health + 1.0f * Time.deltaTime,
+                             minHealth, maxHealth);
+        // ''''''''''''''''''''''''''''''''''''''''''''' Write health value
         healthUI.text = "(" + ((int)health).ToString() + ")";
-
-        if (health <= 0)
-        {
+        // ''''''''''''''''''''''''''''''''''''''''''''''''''''''' End hame
+        if (Mathf.Approximately(health, 0.0f)) {
             healthUI.text = "GAME OVER";
             Destroy(gameObject);
         }
-
-        // Render the UI
-        Vector3 uiPos = Camera.main.WorldToScreenPoint(this.transform.position);
+        // '''''''''''''''''''''''''''''''''''''''''''''''''' Render the UI
+        Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
         healthUI.transform.position = uiPos + new Vector3(0, 75, 0);
         healthUI.color = new Color(0.45f, 0.75f, 0.82f);
     }
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.tag == "Enemy")
-        {
+    // ............................................ Collisions <<< ..--==//
+    void OnCollisionStay(Collision collision) {
+        if (collision.gameObject.tag == "Enemy") {
             health -= 20 * Time.deltaTime;
         }
     }
+    // ----------------------------------------------------- Data << --==//
+    // ............................................ Parameters <<< ..--==//
+    [SerializeField] public GameObject fireballPrefab;
+    [SerializeField] private GameObject uiTextPrefab;
+    [SerializeField] private float velocity;
+    // ............................................ Components <<< ..--==//
+    private new Rigidbody rigidbody;
+    // ................................................. Other <<< ..--==//
+    private Text healthUI;
+    private float health = 100.0f;
+    const float maxHealth = 100.0f;
+    const float minHealth = 0.0f;
 }
-
-// /////////////////////////////////////////////////////////// //
+// ///////////////////////////////////////////////////////////////////// //

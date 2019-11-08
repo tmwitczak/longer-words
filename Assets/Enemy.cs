@@ -1,41 +1,28 @@
-﻿// //////////////////////////////////////////////////// Usings //
+﻿// ////////////////////////////////////////////////////////////// Usings //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-// ////////////////////////////////////////////// Class: Enemy //
-public
-class Enemy
-        : MonoBehaviour
-{
-    // ================================== Public interface < ==//
-    // -------------------------------------- Behaviour << --==//
-
-    // ============================ Private implementation < ==//
-    // -------------------------------------- Behaviour << --==//
-    // .............................. Initialization <<< ..--==//
-    private
-    void Awake()
-    {
+// //////////////////////////////////////////////////////// Class: Enemy //
+public class Enemy : MonoBehaviour {
+    // ============================================ Public interface < ==//
+    // ------------------------------------------------ Behaviour << --==//
+    // ----------------------------------------------------- Data << --==//
+    public float velocity;
+    // ====================================== Private implementation < ==//
+    // ------------------------------------------------ Behaviour << --==//
+    // ........................................ Initialization <<< ..--==//
+    private void Awake() {
         SetupReferencesToComponents();
     }
-
-    private
-    void SetupReferencesToComponents()
-    {
+    private void SetupReferencesToComponents() {
         rigidbody = GetComponent<Rigidbody>();
         light = GetComponentsInChildren<Light>()[0];
     }
-
-    private
-    CommandManager.Commands RegisterInCommandManagerAndGetCommands()
+    private CommandManager.Commands RegisterInCommandManagerAndGetCommands()
         => (commands = commandManager.register(this));
 
-    // .............................. TODO: name this section <<< ..--==//
-    private
-    void Start()
-    {
+    private void Start() {
         SetupReferenceToPlayer();
 
         SetupReferencesToManagers();
@@ -43,23 +30,16 @@ class Enemy
 
         InstantiateCommandText();
     }
-
-    private
-    void SetupReferenceToPlayer()
-    {
+    private void SetupReferenceToPlayer() {
         player = GameObject.FindGameObjectsWithTag("Player")[0];
     }
-
-    private void SetupReferencesToManagers()
-    {
+    private void SetupReferencesToManagers() {
         commandManager = GameObject.Find("CommandManager")
             .GetComponent<CommandManager>();
         gameplayManager = GameObject.Find("GameplayManager")
             .GetComponent<GameplayManager>();
     }
-
-    private
-    void InstantiateCommandText()
+    private void InstantiateCommandText()
     {
         commandText = Instantiate(uiTextPrefab,
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
@@ -71,40 +51,31 @@ class Enemy
         healthUI.transform.parent = GameObject.Find("Canvas").transform;
         healthUI.text = health.ToString();
     }
-
-    // .............................. Destruction <<< ..--==//
-    private
-    void OnDestroy()
-    {
+    // ........................................... Destruction <<< ..--==//
+    private void OnDestroy() {
         gameplayManager.enemyKilled();
         commandManager.release(this);
     }
 
-    // ................................. Update loop <<< ..--==//
-    void Update()
-    {
+    // ........................................... Update loop <<< ..--==//
+    private void Update() {
         bool destroy = true;
 
         // Check and update command UI
         string currentCommand = "";
-        if (gameplayManager.mode == GameplayManager.Mode.MoveAndLocate)
-        {
+        if (gameplayManager.mode == GameplayManager.Mode.MoveAndLocate) {
             currentCommand = commands.locate;
         }
-        if (gameplayManager.mode == GameplayManager.Mode.Attack)
-        {
+        if (gameplayManager.mode == GameplayManager.Mode.Attack) {
             currentCommand = commands.attack;
         }
 
         List<bool> letterStatus = new List<bool>(new bool[currentCommand.Length]);
-        for (int i = 0; i < gameplayManager.currentCommand.Length; i++)
-        {
-            if (currentCommand[i] == gameplayManager.currentCommand[i])
-            {
+        for (int i = 0; i < gameplayManager.currentCommand.Length; i++) {
+            if (currentCommand[i] == gameplayManager.currentCommand[i]) {
                 letterStatus[i] = true;
             }
-            else
-            {
+            else {
                 letterStatus[i] = false;
             }
         }
@@ -116,23 +87,18 @@ class Enemy
             notcorrectletters = 0;
         }
 
-        for (int i = 0; i < currentCommand.Length; i++)
-        {
+        for (int i = 0; i < currentCommand.Length; i++) {
             commandText.text += "<color=";
-            if (letterStatus[i])
-            {
+            if (letterStatus[i]) {
                 commandText.text += "#747E80";
                 light.intensity += 0.25f;
                 correctLetters++;
             }
-            else
-            {
-                if (i > gameplayManager.currentCommand.Length - 1)
-                {
+            else {
+                if (i > gameplayManager.currentCommand.Length - 1) {
                     commandText.text += "#f7f3e8";
                 }
-                else
-                {
+                else {
                     commandText.text += "#F2583E";
                     light.intensity -= 0.125f;
                     notcorrectletters++;
@@ -162,47 +128,35 @@ class Enemy
         healthUI.transform.position = uiPos + new Vector3(0, 50, 0);
         healthUI.color = new Color(0.95f, 0.35f, 0.24f);
 
-        if (destroy)
-        {
-            if (gameplayManager.mode == GameplayManager.Mode.MoveAndLocate)
-            {
+        if (destroy) {
+            if (gameplayManager.mode == GameplayManager.Mode.MoveAndLocate) {
                 gameplayManager.enemyTargeted(gameObject);
             }
-            else if (gameplayManager.mode == GameplayManager.Mode.Attack)
-            {
+            else if (gameplayManager.mode == GameplayManager.Mode.Attack) {
                 // Destroy(commandText);
                 // Destroy(gameObject);
             }
         }
 
         if ((gameplayManager.mode == GameplayManager.Mode.Attack
-            && gameplayManager.target != this.gameObject))
-        {
+            && gameplayManager.target != this.gameObject)) {
             commandText.text = "";
         }
 
         healthUI.text = "(" + ((int)health).ToString() + ")";
 
-
-        if (health <= 0.0f)
-        {
+        if (health <= 0.0f) {
             Destroy(commandText);
             Destroy(healthUI);
             Destroy(gameObject);
         }
-        else
-        {
+        else {
             GetComponentsInChildren<Light>()[1].intensity = 0.5f * health / 100.0f;
         }
     }
-
-    float correctLetters = 0;
-    float notcorrectletters = 0;
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Fireball")
-        {
+    private
+    void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.tag == "Fireball") {
             health -= (100 * correctLetters / commands.attack.Length);
             health += (400 * notcorrectletters / commands.attack.Length);
             if (health >= 100) health = 100;
@@ -210,28 +164,21 @@ class Enemy
             notcorrectletters = 0;
         }
     }
-
-
-    void FixedUpdate()
-    {
+    private
+    void FixedUpdate() {
         MoveTowardsPlayer();
     }
-
-    private void MoveTowardsPlayer()
-    {
+    private void MoveTowardsPlayer() {
         rigidbody.AddForce(velocity * Time.deltaTime
                            * (player.transform.position
                               - transform.position).normalized);
     }
-
-
-    // ------------------------------------------- Data << --==//
-    // .............. Accessible from Unity's editor <<< ..--==//
+    // ----------------------------------------------------- Data << --==//
+    // ............................................ Parameters <<< ..--==//
     [SerializeField] private GameObject uiTextPrefab;
     [SerializeField] private GameObject uiTextPrefabSmall;
-    [SerializeField] public float velocity;
 
-    // .................................. Components <<< ..--==//
+    // ................................................. Other <<< ..--==//
     private new Rigidbody rigidbody;
 
     private GameObject player;
@@ -246,6 +193,9 @@ class Enemy
     Light light;
 
     public float health = 100.0f;
+
+    float correctLetters = 0;
+    float notcorrectletters = 0;
 
 }
 

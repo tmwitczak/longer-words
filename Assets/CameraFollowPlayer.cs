@@ -1,22 +1,29 @@
-﻿using System.Collections;
+﻿// ////////////////////////////////////////////////////////////// Usings //
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class CameraFollowPlayer : MonoBehaviour
-{
-    public GameObject player;
-    Vector3 offset;
-
-    void Start()
-    {
-        offset = transform.position - player.transform.position;
+// /////////////////////////////////////////// Class: CameraFollowPlayer //
+public class CameraFollowPlayer : MonoBehaviour {
+    // ====================================== Private implementation < ==//
+    // ------------------------------------------------ Behaviour << --==//
+    private void Start() {
+        offset = transform.position - player.position;
     }
-
-    void Update()
-    {
-        Vector3 velocity = Vector3.zero;
+    private void Update() {
         transform.position = Vector3.SmoothDamp(
             transform.position,
-            player.transform.position + offset, ref velocity, 0.1f);
+            player.position + offset,
+            ref currentVelocity,
+            smoothTime);
     }
+    // ----------------------------------------------------- Data << --==//
+    // ............................................ Parameters <<< ..--==//
+    [SerializeField] private Transform player;
+    [SerializeField] private float smoothTime;
+    // ....................................... Camera's offset <<< ..--==//
+    // ............. (so it's actually over the player's head) <<< ..--==//
+    private Vector3 offset;
+    // ....................................... Dummy variables <<< ..--==//
+    private Vector3 currentVelocity = Vector3.zero;
 }
+// ///////////////////////////////////////////////////////////////////// //

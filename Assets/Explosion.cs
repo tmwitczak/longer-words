@@ -1,20 +1,27 @@
-﻿using System.Collections;
+﻿// ////////////////////////////////////////////////////////////// Usings //
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Explosion : MonoBehaviour
-{
-    void Update()
-    {
-        time -= Time.deltaTime;
-        GetComponentsInChildren<Light>()[0].intensity
-            -= ((4.0f / timeStart) * Time.deltaTime);
-        if (time <= 0.0f)
-        {
+// //////////////////////////////////////////////////// Class: Explosion //
+public class Explosion : MonoBehaviour {
+    // ====================================== Private implementation < ==//
+    // ------------------------------------------------ Behaviour << --==//
+    private void Update() {
+        timePassed = Mathf.Clamp(timePassed + Time.deltaTime,
+                                 0.0f, duration);
+        if (Mathf.Approximately(timePassed, duration)) {
             Destroy(gameObject);
         }
+        SetLightsIntensity();
     }
-
-    float timeStart = 1;
-    float time = 1;
+    private void SetLightsIntensity() {
+        GetComponentsInChildren<Light>()[0].intensity
+            -= ((4.0f / duration) * Time.deltaTime);
+    }
+    // ----------------------------------------------------- Data << --==//
+    // ............................................ Parameters <<< ..--==//
+    [SerializeField] private float duration;
+    // ................................................. Timer <<< ..--==//
+    private float timePassed = 0.0f;
 }
+// ///////////////////////////////////////////////////////////////////// //
