@@ -1,4 +1,4 @@
-﻿// ////////////////////////////////////////////////////////////// Usings //
+// ////////////////////////////////////////////////////////////// Usings //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +9,11 @@ public class Enemy : MonoBehaviour {
     // ------------------------------------------------ Behaviour << --==//
     // ----------------------------------------------------- Data << --==//
     public float velocity;
+    private float multiplier = 1.0f;
     // ====================================== Private implementation < ==//
     // ------------------------------------------------ Behaviour << --==//
     // ........................................ Initialization <<< ..--==//
+
     private void Awake() {
         SetupReferencesToComponents();
     }
@@ -169,9 +171,14 @@ public class Enemy : MonoBehaviour {
         MoveTowardsPlayer();
     }
     private void MoveTowardsPlayer() {
-        rigidbody.AddForce(velocity * Time.deltaTime
+        rigidbody.AddForce(velocity * multiplier * Time.deltaTime
                            * (player.transform.position
-                              - transform.position).normalized);
+                              - transform.position).normalized) ;
+    }
+
+    public void setMultiplier(float value)
+    {
+        multiplier = value;
     }
     // ----------------------------------------------------- Data << --==//
     // ............................................ Parameters <<< ..--==//

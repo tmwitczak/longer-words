@@ -1,4 +1,4 @@
-﻿// ////////////////////////////////////////////////////////////// Usings //
+// ////////////////////////////////////////////////////////////// Usings //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +40,7 @@ public class GameplayManager : MonoBehaviour {
         // ''''''''''''''''''''''''''''''''''''''''''''''''' Start the wave
         if (!enemyManager.areThereAnyEnemies()) {
             spawnEnemies();
+            spawnPowerUps();
             waveNumber++;
         }
         // '''''''''''''''''''''''''''''''''''''''''''''''''''''' Get input
@@ -114,11 +115,20 @@ public class GameplayManager : MonoBehaviour {
             enemyManager.SpawnEnemyAtRandomLocation(waveNumber);
         }
     }
+    void spawnPowerUps()
+    {
+        for (int i = 0; i < waveNumber + 1; i++)
+        {
+            powerUpManager.SpawnPowerUpAtRandomLocation(waveNumber);
+        }
+    }
+
     // ............................................ Parameters <<< ..--==//
     [SerializeField] private GameObject uiTextPrefab;
     [SerializeField] private GameObject uiTextPrefabSmall;
     [SerializeField] private CommandManager commandManager;
     [SerializeField] private EnemyManager enemyManager;
+    [SerializeField] private PowerUpManager powerUpManager;
     [SerializeField] private Player player;
     // ................................................. Other <<< ..--==//
     public bool allWordCorrect = false;

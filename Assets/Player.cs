@@ -1,4 +1,4 @@
-﻿// ////////////////////////////////////////////////////////////// Usings //
+// ////////////////////////////////////////////////////////////// Usings //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,13 +63,37 @@ public class Player : MonoBehaviour {
     // ............................................ Parameters <<< ..--==//
     [SerializeField] public GameObject fireballPrefab;
     [SerializeField] private GameObject uiTextPrefab;
+    private CameraShake cameraShake;
     [SerializeField] private float velocity;
     // ............................................ Components <<< ..--==//
     private new Rigidbody rigidbody;
     // ................................................. Other <<< ..--==//
     private Text healthUI;
     private float health = 100.0f;
-    const float maxHealth = 100.0f;
+    private float maxHealth = 100.0f;
     const float minHealth = 0.0f;
+
+    public void setVelocity(float multiplier)
+    {
+        velocity *= multiplier;
+    }
+
+    public float getVelocity()
+    {
+        return velocity;
+    }
+    public void setHealth(float currentHealth, float max)
+    {
+        maxHealth = max;
+        health = currentHealth; 
+
+    }
+
+
+    public float getHealth()
+    {
+        return health;
+    }
+
 }
 // ///////////////////////////////////////////////////////////////////// //
