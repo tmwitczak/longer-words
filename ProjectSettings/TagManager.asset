@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Fireball
+  - Explosion
+  - FreezePowerUp
   layers:
   - Default
   - TransparentFX
