@@ -1,11 +1,13 @@
 /* ///////////////////////////////////////////////////////////// Imports */
-@import url("https://fonts.googleapis.com/css?family=Playfair+Display&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Playfair+Display&display=swap");
 
 /* /////////////////////////////////////////////////////////// Variables */
 :root {
-    --text-height-title: 8.2em;
+    --text-height-title: 6em;
     --text-height-subtitle: 1.6em;
     --text-height-content: 2em;
+    --text-height-section-title: 3em;
+    --text-height-section-content: 1.5em;
     /* --text-height-button: calc(var(--text-height-typing) / 5); */
 
     --color-text: hsl(0, 0%, 10%);
@@ -13,6 +15,65 @@
     /* --color-3: hsl(0, 0%, 85%);
     --color-4: hsl(0, 0%, 92.5%);
     --color-5: hsl(0, 0%, 55%); */
+}
+
+/* AUTHORS */
+#section-authors {
+    display: flex;
+    flex-flow: row nowrap;
+    font-family: "Open Sans", sans-serif;
+    padding: 5%;
+    letter-spacing: 0.1ch;
+    justify-content: center;
+}
+#section-authors .team-description {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    margin-right: 30px;
+}
+#section-authors .team-description div {
+    width: 100%;
+    margin: 10px;
+}
+#section-authors .team-description .title {
+    font-size: var(--text-height-section-title);
+    text-align: left;
+    align-self: center;
+}
+#section-authors .team-description .content-1 {
+    font-size: var(--text-height-section-content);
+    text-align: left;
+    /* align-self: center; */
+}
+#section-authors .team-description .content-2 {
+    font-size: var(--text-height-section-content);
+    text-align: justify;
+    align-self: center;
+}
+#section-authors .team-description b {
+    font-weight: 1000;
+    letter-spacing: 0.125ch;
+    padding: 0.25ch;
+}
+#section-authors .team-member {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+
+    width: 20%;
+}
+#section-authors .team-member img {
+    margin: 20px;
+    height: 325px;
+    object-fit: contain;
+    /* align-content: space-around; */
+}
+#section-authors .team-member div {
+    text-align: center;
+    font-size: 1.5em;
 }
 
 html {
@@ -23,7 +84,10 @@ html {
     padding: 0;
     background-color: var(--color-background);
 
+    scroll-behavior: smooth;
+
     font-family: "Playfair Display", serif;
+    font-size: 100%;
     /* font-size: var(--text-height-content); */
 
     box-shadow: inset 0 0 2em 0 var(--color-4);
@@ -50,9 +114,6 @@ body {
 li {
     display: inline;
 }
-img {
-    max-width: 425px;
-}
 
 #title {
     margin: auto;
@@ -62,14 +123,16 @@ img {
     left: 0;
     right: 0;
 
-    height: 400px;/*var(--text-height-title);*/
-    line-height: 400px;/*var(--text-height-title);*/
+    display: flex;
+
+    height: 200px; /*var(--text-height-title);*/
+    /* line-height: 200px; var(--text-height-title); */
     letter-spacing: 0.25rem;
     /* height: 250px; */
     font-size: var(--text-height-title);
     /* font-weight: bold; */
-    text-align: left;
-    padding-left: 150px;
+    text-align: center;
+    /* padding-left: 150px; */
     background-color: var(--color-text);
     color: var(--color-background);
 
@@ -79,6 +142,10 @@ img {
     cursor: default;
 
     z-index: 1;
+}
+#title div {
+    align-self: center;
+    width: 100%;
 }
 
 #text-to-type span {
