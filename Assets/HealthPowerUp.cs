@@ -28,6 +28,13 @@ public class HealthPowerUp : MonoBehaviour
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
 
+        ParticleSystem particleSystem = GameObject.Find("Particle System").GetComponent<ParticleSystem>();
+        var emission = particleSystem.emission;
+        emission.enabled = false;
+
+        Light spotlight = GameObject.Find("Spot Light").GetComponent<Light>();
+        spotlight.enabled = false;
+
         yield return new WaitForSeconds(20.0f);
 
         float actualHealth = p.getHealth();

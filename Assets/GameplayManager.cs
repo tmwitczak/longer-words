@@ -117,9 +117,9 @@ public class GameplayManager : MonoBehaviour {
     }
     void spawnPowerUps()
     {
-        for (int i = 0; i < waveNumber + 1; i++)
+        if (GameObject.Find("FreezePowerUp(Clone)") == null && GameObject.Find("SpeedPowerUp(Clone)") == null && GameObject.Find("HealthPowerUp(Clone)") == null)
         {
-            powerUpManager.SpawnPowerUpAtRandomLocation(waveNumber);
+            powerUpManager.SpawnPowerUpAtRandomLocation(1);
         }
     }
 

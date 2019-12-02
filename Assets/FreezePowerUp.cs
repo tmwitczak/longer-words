@@ -13,8 +13,11 @@ public class FreezePowerUp : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             StartCoroutine(PickUp(other));
+            
         }
     }
+
+
 
 
     IEnumerator PickUp(Collider player)
@@ -23,13 +26,34 @@ public class FreezePowerUp : MonoBehaviour
 
         Player p = player.GetComponent<Player>();
 
+        Enemy e;
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i =0; i < enemy.Length; i++)
+        {
+            e = enemy[i].GetComponent<Enemy>();
+            e.setMultiplier(0);
+        }
+
+
+        
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
 
-        //GameObject.FindGameObjectWithTag("Enemy");
+        ParticleSystem particleSystem = GameObject.Find("Particle System").GetComponent<ParticleSystem>();
+        var emission = particleSystem.emission;
+        emission.enabled = false;
+
+        Light spotlight = GameObject.Find("Spot Light").GetComponent<Light>();
+        spotlight.enabled = false;
 
         yield return new WaitForSeconds(5.0f);
 
+
+        for (int i = 0; i < enemy.Length; i++)
+        {
+            e = enemy[i].GetComponent<Enemy>();
+            e.setMultiplier(1);
+        }
 
 
         Destroy(gameObject);
