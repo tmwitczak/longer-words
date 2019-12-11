@@ -16,10 +16,25 @@ public class CommandManager : MonoBehaviour {
 
         // Generate LOCATE command
         commands.locate += locateSymbol;
-        for (int i = 0; i < 2; i++)
-        {
-            commands.locate += (char)('0' + Random.Range(0, 10));
-        }
+
+        bool generate = false;
+        do {
+            generate = false;
+            for (int i = 0; i < 2; i++) {
+                commands.locate += (char)('0' + Random.Range(0, 10));
+            }
+            // print (commands.locate);
+            var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (var enemy in enemies) {
+                print (enemy.name);
+                if (string.Compare(enemy.GetComponent<Enemy>().commands.locate,
+                commands.locate) == 0) {
+                    generate = true;
+                    break;
+                }
+            }
+        } while (generate);
+        commands.locate = commands.locate.Substring(0, 2);
 
         // Generate ATTACK command
         commands.attack += attackSymbol;

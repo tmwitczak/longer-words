@@ -6,9 +6,6 @@ using UnityEngine;
 public class Explosion : MonoBehaviour {
     // ====================================== Private implementation < ==//
     // ------------------------------------------------ Behaviour << --==//
-
-    public CameraShake cameraShake;
-
     private void Update() {
         timePassed = Mathf.Clamp(timePassed + Time.deltaTime,
                                  0.0f, duration);
@@ -16,7 +13,6 @@ public class Explosion : MonoBehaviour {
             Destroy(gameObject);
         }
         SetLightsIntensity();
-        StartCoroutine( cameraShake.Shake(0.15f, 0.4f));
     }
     private void SetLightsIntensity() {
         GetComponentsInChildren<Light>()[0].intensity

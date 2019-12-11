@@ -45,19 +45,33 @@ public class GameplayManager : MonoBehaviour {
         }
         // '''''''''''''''''''''''''''''''''''''''''''''''''''''' Get input
         foreach (char c in Input.inputString) {
-            if (c == '\b' && command.Length != 0) {
-                command = command.Substring(0, command.Length - 1);
+            if (c == '\b') {
+                if (command.Length > 0) {
+                    command = command.Substring(0, command.Length - 1);
+                }
+                if (command.Length == 0) {
+                    emptyWord = true;
+                }
             }
             else if (c != ' ') {
-                if ((mode == Mode.MoveAndLocate && c >= '0' && c <= '9')
-                || mode == Mode.Attack) {
-                    command += c;
+                if (mode == Mode.MoveAndLocate && c >= '0' && c <= '9') {
+                    if (currentCommand.Length < 2) {
+                        command += c;
+                    }
+                }
+                else if(mode == Mode.Attack) {
+                    // print (currentCommand.Length);
+                    // print( target.GetComponent<Enemy>().currentCommand.Length);
+                    if (currentCommand.Length <
+                        target.GetComponent<Enemy>().currentCommand.Length) {
+                        command += c;
+                    }
                 }
             }
             if (c == ' ' || Input.GetKey(KeyCode.Return)) {
                 if (mode == Mode.Attack) {
                     if (!emptyWord) {
-                        player.Attack(target.transform);
+                        // player.Attack(target.GetComponent<Enemy>().getAveragePosition());
                     }
                     mode = Mode.MoveAndLocate;
                     command = "";
@@ -66,7 +80,7 @@ public class GameplayManager : MonoBehaviour {
         }
         if (mode == Mode.Attack && allWordCorrect) {
             if (!emptyWord) {
-                player.Attack(target.transform);
+                player.Attack(target.GetComponent<Enemy>().getAveragePosition());
             }
             mode = Mode.MoveAndLocate;
             command = "";
@@ -101,18 +115,50 @@ public class GameplayManager : MonoBehaviour {
         waveText.color = new Color(0.97f, 0.95f, 0.91f);
 
         tutorialText.text = "";
-        if (mode == Mode.MoveAndLocate) {
-            tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nEnter chosen enemy's number to locate him";
-        }
-        if (mode == Mode.Attack) {
-            tutorialText.text += "Enter chosen enemy's word to attack him\nPress <b>Space</b> or <b>Enter</b> to attack whenever you want to\n\n<i>(correctly typed letters induce damage,\nincorrectly typed ones - regenerate enemy's health</i>)";
-        }
+        // if (mode == Mode.MoveAndLocate) {
+        //     tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nEnter chosen enemy's number to locate him";
+        // }
+        // if (mode == Mode.Attack) {
+        //     tutorialText.text += "Enter chosen enemy's word to attack him\nPress <b>Space</b> or <b>Enter</b> to attack whenever you want to\n\n<i>(correctly typed letters induce damage,\nincorrectly typed ones - regenerate enemy's health</i>)";
+        // }
         tutorialText.transform.position = new Vector3(1920 / 2 + 50, 1080 - 575, 0);
         tutorialText.color = new Color(0.97f, 0.95f, 0.91f);
     }
     void spawnEnemies() {
-        for (int i = 0; i < waveNumber + 1; i++) {
-            enemyManager.SpawnEnemyAtRandomLocation(waveNumber);
+        switch(waveNumber) {
+            case 0:
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 0);
+                break;
+            case 1:
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 100);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 100);
+                break;
+            case 2:
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 2, 1, 1, 200);
+                break;
+            case 3:
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 2, 1, 50);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 2, 1, 50);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 400);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 400);
+                break;
+            case 4:
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 2, 2, 2, 400);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 2, 1, 400);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 2, 1, 400);
+                break;
+            case 5:
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 3, 3, 3, 600);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
+                enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
+                break;
+            default:
+                for (int i = 0; i < waveNumber; i++) {
+                    enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 0);
+                }
+                break;
         }
     }
     void spawnPowerUps()

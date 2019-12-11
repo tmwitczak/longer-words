@@ -7,14 +7,16 @@ public class Fireball : MonoBehaviour {
     // ============================================ Public interface < ==//
     // ------------------------------------------------ Behaviour << --==//
     // ............................................ Collisions <<< ..--==//
-    public CameraShake cameraShake;
+    bool destroyed = false;
     public void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Enemy") {
+        if (!destroyed && collision.gameObject.CompareTag("Enemy")) {
             Instantiate(explosionPrefab,
                         collision.gameObject.transform.position,
                         Quaternion.identity);
+            GameObject.Find("Main Camera").GetComponent<CameraFollowPlayer>()
+                .Shake(0.5f, 0.3f, GetComponent<Rigidbody>().velocity);
+            destroyed = true;
             Destroy(gameObject);
-            StartCoroutine(cameraShake.Shake(0.15f, 0.4f));
         }
     }
     // ====================================== Private implementation < ==//

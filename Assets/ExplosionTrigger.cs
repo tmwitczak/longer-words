@@ -12,7 +12,7 @@ public class ExplosionTrigger : MonoBehaviour
     {
         if (GameObject.FindGameObjectWithTag("Explosion"))
         {
-            StartCoroutine(cameraShake.Shake(0.05f, 0.2f));
+            // StartCoroutine(cameraShake.Shake(0.05f, 0.2f));
         }
     }
 }

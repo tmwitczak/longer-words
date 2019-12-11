@@ -10,8 +10,8 @@ public class Player : MonoBehaviour {
     public void Move(Vector3 force) {
         rigidbody.AddForce(velocity * force.normalized);
     }
-    public void Attack(Transform enemy) {
-        Vector3 direction = (enemy.position - transform.position)
+    public void Attack(Vector3 enemy) {
+        Vector3 direction = (enemy - transform.position)
                             .normalized;
         GameObject fireball = Instantiate(fireballPrefab,
                                           transform.position,
