@@ -263,6 +263,27 @@ public class Enemy : MonoBehaviour {
     {
         multiplier = value;
     }
+
+    public float getMultiplier()
+    {
+        return multiplier;
+    }
+
+    public float getHealth()
+    {
+        return health;
+    }
+
+    public Vector3 getPosition()
+    {
+        return this.transform.position;
+    }
+
+    public void setPosition(float x, float y, float z)
+    {
+        this.transform.position = new Vector3(x, y, z);
+
+    }
     // ----------------------------------------------------- Data << --==//
     // ............................................ Parameters <<< ..--==//
     [SerializeField] private GameObject uiTextPrefab;

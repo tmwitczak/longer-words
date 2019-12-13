@@ -1,4 +1,4 @@
-﻿// ////////////////////////////////////////////////////////////// Usings //
+// ////////////////////////////////////////////////////////////// Usings //
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +28,53 @@ public class EnemyManager : MonoBehaviour {
 
         enemies.Add(enemy);
     }
+    public void SaveEnemies()
+    {
+        
+        SaveSystem.SaveEnemy(EnemiesList());
+        savedEnemies = EnemiesList();
+        Debug.Log("Number of enemies:  " + savedEnemies.Count);
+        for (int i = 0; i < savedEnemies.Count; i++)
+        {
+            Debug.Log("health[" + i + "] = " + savedEnemies[i].health);
+        }
+    }
+    private List<Enemy> EnemiesList()
+    {
+        List<Enemy> enemiesList = new List<Enemy>();
+        Enemy e;
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < enemy.Length; i++)
+        {
+            e = enemy[i].GetComponent<Enemy>();
+            enemiesList.Add(e);
+        }
+        return enemiesList;
+    }
+
+    public void LoadEnemy()
+    {
+        EnemyData enemyData = SaveSystem.LoadEnemy();
+        List<Enemy> lista = new List<Enemy>();
+        lista = EnemiesList();
+        
+        Debug.Log("Number of enemies saved:  " + savedEnemies.Count);
+        Debug.Log("Number of enemies in lista:  " + lista.Count);
+
+        for (int i = 0; i < savedEnemies.Count; i++)
+        {
+            Debug.Log("health[" +i+"] = " + savedEnemies[i].health);
+        }
+            for (int i = 0; i < savedEnemies.Count; i++)
+        {
+           savedEnemies[i].setMultiplier(enemyData.multiplier[i]);
+           lista[i].health=enemyData.health[i];
+
+           lista[i].setPosition(enemyData.position[i][0], enemyData.position[i][1], enemyData.position[i][2]);
+        }
+
+
+    }
     public bool areThereAnyEnemies()
             => (GameObject.FindGameObjectsWithTag("Enemy")).Length != 0;
     // ----------------------------------------------------- Data << --==//
@@ -37,5 +84,8 @@ public class EnemyManager : MonoBehaviour {
     // ................................................. Other <<< ..--==//
     // TODO: This list doesn't work for now, to be fixed
     List<GameObject> enemies = new List<GameObject>();
+    List<Enemy> savedEnemies = new List<Enemy>();
+
+ 
 }
 // ///////////////////////////////////////////////////////////////////// //

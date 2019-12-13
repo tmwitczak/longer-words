@@ -59,6 +59,26 @@ public class Player : MonoBehaviour {
             health -= 20 * Time.deltaTime;
         }
     }
+
+
+    public void SavePlayer()
+    {
+        SaveSystem.SavePlayer(this);
+    }
+
+    public void LoadPlayer()
+    {
+        PlayerData data = SaveSystem.LoadPlayer();
+
+        health = data.health;
+        velocity = data.velocity;
+
+        Vector3 position;
+        position.x = data.position[0];
+        position.y = data.position[1];
+        position.z = data.position[2];
+        transform.position = position;
+    }
     // ----------------------------------------------------- Data << --==//
     // ............................................ Parameters <<< ..--==//
     [SerializeField] public GameObject fireballPrefab;
