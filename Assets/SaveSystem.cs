@@ -37,21 +37,31 @@ public static class SaveSystem
         }
     }
 
-    public static void SaveEnemy(List<Enemy> enem)
+    //public static void SaveEnemy(List<Enemy> enem)
+    //{
+    //    BinaryFormatter formatter = new BinaryFormatter();
+    //    string path = Application.persistentDataPath + "/enemy.txt";
+    //    FileStream stream = new FileStream(path, FileMode.Create);
+
+    //    EnemyData data = new EnemyData(enem);
+
+    //    formatter.Serialize(stream, data);
+    //    stream.Close();
+    //}
+    public static void SaveEnemy(Enemy enemy, int pathIndex)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/enemy.txt";
+        string path = Application.persistentDataPath +  "/enemy" + pathIndex + ".txt";
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        EnemyData data = new EnemyData(enem);
+        EnemyData data = new EnemyData(enemy);
 
         formatter.Serialize(stream, data);
         stream.Close();
     }
-
-    public static EnemyData LoadEnemy()
+    public static EnemyData LoadEnemy(int pathIndex)
     {
-        string path = Application.persistentDataPath + "/enemy.txt";
+        string path = Application.persistentDataPath + "/enemy"+ pathIndex +".txt";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 // //////////////////////////////////////////////////////// Class: Enemy //
+[System.Serializable]
 public class Enemy : MonoBehaviour {
     // ============================================ Public interface < ==//
     // ------------------------------------------------ Behaviour << --==//
@@ -52,6 +53,7 @@ public class Enemy : MonoBehaviour {
         commandText = Instantiate(uiTextPrefab,
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
         commandText.transform.parent = GameObject.Find("Canvas").transform;
+        commandText.tag = "LocateNumber";
         commandText.text = commands.locate;
 
         healthUI = Instantiate(uiTextPrefabSmall,
@@ -282,7 +284,21 @@ public class Enemy : MonoBehaviour {
     public void setPosition(float x, float y, float z)
     {
         this.transform.position = new Vector3(x, y, z);
+    }
 
+    public int getXParts()
+    {
+        return xParts;
+    }
+
+    public int getYParts()
+    {
+        return yParts;
+    }
+
+    public int getZParts()
+    {
+        return zParts;
     }
     // ----------------------------------------------------- Data << --==//
     // ............................................ Parameters <<< ..--==//

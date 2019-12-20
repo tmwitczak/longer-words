@@ -28,16 +28,42 @@ public class EnemyManager : MonoBehaviour {
 
         enemies.Add(enemy);
     }
+
+    public void SpawnEnemy(int a, int b, int c, int vel, EnemyData data)
+    {
+        Vector3 vector = new Vector3(data.position[0], data.position[1], data.position[2]);
+        GameObject enemy = Instantiate(enemyPrefab,
+                        vector,
+                        Quaternion.identity);
+        var e = enemy.GetComponent<Enemy>();
+        e.health = data.health;// + 25.0f * Random.Range(0, wave);
+        // e.velocity = 1500 + wave * 50 / (a*b*c);
+        e.velocity = 1500 + vel / (a * b * c);
+        e.GenerateParts(a, b, c);
+
+        enemies.Add(enemy);
+    }
+
+    //Enemy save working with one enemy 
     public void SaveEnemies()
     {
         
-        SaveSystem.SaveEnemy(EnemiesList());
-        savedEnemies = EnemiesList();
-        Debug.Log("Number of enemies:  " + savedEnemies.Count);
-        for (int i = 0; i < savedEnemies.Count; i++)
+        Enemy e = new Enemy();
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < enemy.Length; i++)
         {
-            Debug.Log("health[" + i + "] = " + savedEnemies[i].health);
+            e = enemy[i].GetComponent<Enemy>();
+            savedEnemies.Add(e);
+            SaveSystem.SaveEnemy(e, i);
         }
+        
+        //savedEnemies = EnemiesList();
+        
+        //Debug.Log("Number of enemies:  " + savedEnemies.Count);
+        //for (int i = 0; i < savedEnemies.Count; i++)
+        //{
+        //    Debug.Log("health[" + i + "] = " + savedEnemies[i].health);
+        //}
     }
     private List<Enemy> EnemiesList()
     {
@@ -52,27 +78,75 @@ public class EnemyManager : MonoBehaviour {
         return enemiesList;
     }
 
+    //public void LoadEnemy()
+    //{
+    //    EnemyData enemyData = SaveSystem.LoadEnemy();
+    //    List<Enemy> lista = new List<Enemy>();
+    //    lista = EnemiesList();
+
+    //    Debug.Log("Number of enemies saved:  " + savedEnemies.Count);
+    //    //Debug.Log("Number of enemies in lista:  " + lista.Count);
+
+    //    for (int i = 0; i < savedEnemies.Count; i++)
+    //    {
+    //        Debug.Log("health[" +i+"] = " + savedEnemies[i].health);
+    //    }
+    //        for (int i = 0; i < savedEnemies.Count; i++)
+    //    {
+    //        savedEnemies[i].setMultiplier(enemyData.multiplier[i]);
+    //        savedEnemies[i].health = enemyData.health[i];
+    //        savedEnemies[i].setPosition(enemyData.position[i][0], enemyData.position[i][1], enemyData.position[i][2]);
+    //        //savedEnemies[i].setPosition(2 + i, 2 + i, 2 + i);
+
+    //    }
+    //}
+
+
+    //Enemy load working with one enemy
+    //public void LoadEnemy()
+    //{
+    //    Enemy e = new Enemy();
+    //    GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+    //    List<EnemyData> data = new List<EnemyData>();
+    //    for (int j = 0; j < enemy.Length; j++)
+    //    {
+    //        e = enemy[j].GetComponent<Enemy>();
+
+    //    }
+    //    for (int i = 0; i < savedEnemies.Count; i++)
+    //    {
+    //        data.Add(SaveSystem.LoadEnemy(i));
+
+    //        e.health = data[i].health;
+    //        e.setMultiplier(data[i].multiplier);
+    //        e.setPosition(data[i].position[0], data[i].position[1], data[i].position[2]);
+    //    }
+    //    Debug.Log("Liczba obiektow data: " + data.Count);
+
+    //}
     public void LoadEnemy()
     {
-        EnemyData enemyData = SaveSystem.LoadEnemy();
-        List<Enemy> lista = new List<Enemy>();
-        lista = EnemiesList();
-        
-        Debug.Log("Number of enemies saved:  " + savedEnemies.Count);
-        Debug.Log("Number of enemies in lista:  " + lista.Count);
 
-        for (int i = 0; i < savedEnemies.Count; i++)
+        List<EnemyData> data = new List<EnemyData>();
+        GameObject[] enemy = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] numbers = GameObject.FindGameObjectsWithTag("LocateNumber");
+        Enemy e = new Enemy();
+        for (int i = 0; i < enemy.Length; i++)
         {
-            Debug.Log("health[" +i+"] = " + savedEnemies[i].health);
+            Destroy(numbers[i]);
+            Destroy(enemy[i]);
         }
-            for (int i = 0; i < savedEnemies.Count; i++)
+        for (int i = 0; i < enemy.Length+1; i++)
         {
-           savedEnemies[i].setMultiplier(enemyData.multiplier[i]);
-           lista[i].health=enemyData.health[i];
-
-           lista[i].setPosition(enemyData.position[i][0], enemyData.position[i][1], enemyData.position[i][2]);
+            Destroy(numbers[i]);
+           
         }
+        for (int i = 0; i < savedEnemies.Count; i++) { 
+            data.Add(SaveSystem.LoadEnemy(i));
+            SpawnEnemy(1, 1, 1, 0, data[i]);
 
+        }
+        Debug.Log("Liczba obiektow data: " + data.Count);
 
     }
     public bool areThereAnyEnemies()

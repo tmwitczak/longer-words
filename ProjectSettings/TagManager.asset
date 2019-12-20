@@ -9,6 +9,7 @@ TagManager:
   - Explosion
   - FreezePowerUp
   - EnemyPart
+  - LocateNumber
   layers:
   - Default
   - TransparentFX
