@@ -197,6 +197,7 @@ public class Enemy : MonoBehaviour {
             Destroy(commandText);
             Destroy(healthUI);
             Destroy(gameObject);
+
         }
         else {
             GetComponentsInChildren<Light>()[1].intensity = 0.5f * health / 100.0f;
@@ -299,6 +300,16 @@ public class Enemy : MonoBehaviour {
     public int getZParts()
     {
         return zParts;
+    }
+
+    public float getCorrectLetters()
+    {
+        return correctLetters;
+    }
+
+    public float getNotCorrectLetters()
+    {
+        return notcorrectletters;
     }
     // ----------------------------------------------------- Data << --==//
     // ............................................ Parameters <<< ..--==//

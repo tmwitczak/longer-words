@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
@@ -10,9 +12,17 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
 
+
+    float highScore = 0;
+
+
+    //Debug.Log(gameplayManager.GetComponent<GameplayManager>().getCorrectLettres()); 
+
+
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetKeyDown(KeyCode.Escape) )
         {
             if (GameIsPaused)
@@ -22,8 +32,22 @@ public class PauseMenu : MonoBehaviour
             }
             else
             {
-                    Pause();
-              
+                GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
+                Pause();
+                if(SaveSystem.LoadScore() == null)
+                {
+                    SaveSystem.SaveScore(0);
+                }
+
+                float score = gameplayManager.getCorrectLettres();
+
+                if (SaveSystem.LoadScore().getHighScore() < score)
+                {
+                    SaveSystem.SaveScore(score);
+                }
+               
+                Debug.Log("High Score = " + SaveSystem.LoadScore().getHighScore());
+       
             }
         }
         foreach (char c in Input.inputString)
@@ -40,6 +64,7 @@ public class PauseMenu : MonoBehaviour
                 }
                 else if (command == "menu")
                 {
+
                     loadMenu();
                 }
                 else if (command == "quit")
@@ -98,7 +123,11 @@ public class PauseMenu : MonoBehaviour
     public void loadMenu()
     {
         Time.timeScale = 1f;
+
+
         SceneManager.LoadScene(0);
+
+
     }
 
     public void QuitGame()

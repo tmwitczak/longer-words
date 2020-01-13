@@ -65,6 +65,10 @@ public class EnemyManager : MonoBehaviour {
         //    Debug.Log("health[" + i + "] = " + savedEnemies[i].health);
         //}
     }
+
+ 
+
+
     private List<Enemy> EnemiesList()
     {
         List<Enemy> enemiesList = new List<Enemy>();

@@ -31,6 +31,10 @@ public class GameplayManager : MonoBehaviour {
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
         waveText.transform.parent = GameObject.Find("Canvas").transform;
 
+        levelText = Instantiate(uiTextPrefab,
+        new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
+        levelText.transform.parent = GameObject.Find("Canvas").transform;
+
         tutorialText = Instantiate(uiTextPrefabSmall,
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
         tutorialText.transform.parent = GameObject.Find("Canvas").transform;
@@ -42,6 +46,7 @@ public class GameplayManager : MonoBehaviour {
             spawnEnemies();
             spawnPowerUps();
             waveNumber++;
+
         }
         // '''''''''''''''''''''''''''''''''''''''''''''''''''''' Get input
         foreach (char c in Input.inputString) {
@@ -65,6 +70,7 @@ public class GameplayManager : MonoBehaviour {
                     if (currentCommand.Length <
                         target.GetComponent<Enemy>().currentCommand.Length) {
                         command += c;
+                        
                     }
                 }
             }
@@ -72,15 +78,23 @@ public class GameplayManager : MonoBehaviour {
                 if (mode == Mode.Attack) {
                     if (!emptyWord) {
                         // player.Attack(target.GetComponent<Enemy>().getAveragePosition());
+                        notCorrectLettersCount += target.GetComponent<Enemy>().getNotCorrectLetters();
                     }
                     mode = Mode.MoveAndLocate;
                     command = "";
                 }
             }
         }
+        //if (mode == Mode.Attack)
+        //{
+        //   // notCorrectLettersCount = target.GetComponent<Enemy>().getNotCorrectLetters();
+        //}
+       //notCorrectLettersCount1 = notCorrectLettersCount; 
         if (mode == Mode.Attack && allWordCorrect) {
             if (!emptyWord) {
+                correctLettersCount += target.GetComponent<Enemy>().getCorrectLetters();
                 player.Attack(target.GetComponent<Enemy>().getAveragePosition());
+                
             }
             mode = Mode.MoveAndLocate;
             command = "";
@@ -88,7 +102,7 @@ public class GameplayManager : MonoBehaviour {
         }
         else if (mode == Mode.MoveAndLocate) {
             Vector3 direction = Vector3.zero;
-
+            
             if (Input.GetAxis("Vertical") > 0) {
                 direction += Vector3.forward;
             }
@@ -102,11 +116,12 @@ public class GameplayManager : MonoBehaviour {
                 direction += Vector3.right;
             }
             player.Move(Time.deltaTime * direction.normalized);
+
         }
         // ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' UI
         waveText.text = "Level " + waveNumber.ToString();
         if (mode == Mode.MoveAndLocate) {
-            waveText.text += " <i>| Move and locate</i>"; 
+            waveText.text += " <i>| Move and locate</i>" + "                      Correct: " + correctLettersCount + "  Not correct: " + notCorrectLettersCount; 
         }
         if (mode == Mode.Attack) {
             waveText.text += " <i>| Attack</i>";
@@ -114,15 +129,49 @@ public class GameplayManager : MonoBehaviour {
         waveText.transform.position = new Vector3(1920 / 2 + 50, 50, 0);
         waveText.color = new Color(0.97f, 0.95f, 0.91f);
 
-        tutorialText.text = "";
-        // if (mode == Mode.MoveAndLocate) {
-        //     tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nEnter chosen enemy's number to locate him";
-        // }
-        // if (mode == Mode.Attack) {
-        //     tutorialText.text += "Enter chosen enemy's word to attack him\nPress <b>Space</b> or <b>Enter</b> to attack whenever you want to\n\n<i>(correctly typed letters induce damage,\nincorrectly typed ones - regenerate enemy's health</i>)";
-        // }
-        tutorialText.transform.position = new Vector3(1920 / 2 + 50, 1080 - 575, 0);
+        tutorialText.text = "blablabla";
+        //if (mode == Mode.MoveAndLocate)
+        //{
+        //    tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nEnter chosen enemy's number to locate him";
+        //}
+        //if (mode == Mode.Attack)
+        //{
+        //    tutorialText.text += "Enter chosen enemy's word to attack him\nPress <b>Space</b> or <b>Enter</b> to attack whenever you want to\n\n<i>(correctly typed letters induce damage,\nincorrectly typed ones - regenerate enemy's health</i>)";
+        //}
+        tutorialText.transform.position = new Vector3(1920 / 2 + 50, 50, 0);
         tutorialText.color = new Color(0.97f, 0.95f, 0.91f);
+
+
+       // levelText.color = Color.red;
+
+        currentProgress = System.Math.Floor(correctLettersCount / 10);
+
+        levelText.text = "Upgrade (Tab) ";
+        levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);
+        //levelText.color = Color.red;
+
+        if (currentProgress < previousProgress)
+        {
+            //levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);
+            levelText.color = Color.red;
+        }
+
+
+        if (currentProgress > previousProgress)
+        {
+            Debug.Log(currentProgress);
+            Debug.Log(previousProgress);
+            //levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);
+            levelText.color = Color.green; //new Color(0.97f, 0.95f, 0.91f);
+            previousProgress++;
+
+        } 
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            //levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);
+            levelText.color = Color.red;
+        }
+
     }
     void spawnEnemies() {
         switch(waveNumber) {
@@ -153,6 +202,7 @@ public class GameplayManager : MonoBehaviour {
                 enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
                 enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
                 enemyManager.SpawnEnemyAtRandomLocation(waveNumber, 1, 1, 1, 600);
+           
                 break;
             default:
                 for (int i = 0; i < waveNumber; i++) {
@@ -169,6 +219,17 @@ public class GameplayManager : MonoBehaviour {
         }
     }
 
+    public float getCorrectLettres()
+    {
+        return correctLettersCount;
+    }
+
+    public float getNotCorrectLettres()
+    {
+        return notCorrectLettersCount;
+    }
+
+
     // ............................................ Parameters <<< ..--==//
     [SerializeField] private GameObject uiTextPrefab;
     [SerializeField] private GameObject uiTextPrefabSmall;
@@ -179,6 +240,12 @@ public class GameplayManager : MonoBehaviour {
     // ................................................. Other <<< ..--==//
     public bool allWordCorrect = false;
     public bool emptyWord = false;
+    private float correctLettersCount = 0;
+    private float notCorrectLettersCount = 0;
+
+    private double currentProgress = 0;
+    private double previousProgress = 0;
+
 
     public Mode mode = Mode.MoveAndLocate;
 
@@ -186,6 +253,7 @@ public class GameplayManager : MonoBehaviour {
 
     private int waveNumber = 0;
     private Text waveText;
+    private Text levelText;
 
     private Text tutorialText;
     public GameObject target;

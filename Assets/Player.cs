@@ -46,6 +46,15 @@ public class Player : MonoBehaviour {
         // ''''''''''''''''''''''''''''''''''''''''''''''''''''''' End hame
         if (Mathf.Approximately(health, 0.0f)) {
             healthUI.text = "GAME OVER";
+
+            GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
+            float score = gameplayManager.getCorrectLettres();
+
+            if (SaveSystem.LoadScore().getHighScore() < score)
+            {
+                SaveSystem.SaveScore(score);
+            }
+
             Destroy(gameObject);
         }
         // '''''''''''''''''''''''''''''''''''''''''''''''''' Render the UI
@@ -98,6 +107,11 @@ public class Player : MonoBehaviour {
         velocity *= multiplier;
     }
 
+    public void addVelocity(float multiplier)
+    {
+        velocity += multiplier;
+    }
+
     public float getVelocity()
     {
         return velocity;
@@ -107,6 +121,11 @@ public class Player : MonoBehaviour {
         maxHealth = max;
         health = currentHealth; 
 
+    }
+
+    public float getMaxHealth()
+    {
+        return maxHealth;
     }
 
 

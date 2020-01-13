@@ -10,6 +10,8 @@ TagManager:
   - FreezePowerUp
   - EnemyPart
   - LocateNumber
+  - GameplayManager
+  - SpeedButton
   layers:
   - Default
   - TransparentFX
