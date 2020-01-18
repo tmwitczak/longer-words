@@ -90,6 +90,9 @@ public class Enemy : MonoBehaviour {
     public string currentCommand = "";
 
     private void Update() {
+        GetComponents<AudioSource>()[0].volume = 
+                Mathf.Clamp((rigidbody.velocity.magnitude / 2.0f), 0.0f, 1.0f);
+
         timeToNextCollision = Mathf.Clamp(timeToNextCollision - Time.deltaTime,
         0.0f, 5.0f);
 

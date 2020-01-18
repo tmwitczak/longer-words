@@ -17,7 +17,7 @@ public class ProgressMenu : MonoBehaviour
     private double previousLevel = 0; 
 
 
-    void Awake()
+    void Start()
     {
         buttonSpeed = GetComponent<Button>();
         buttonHealth = GetComponent<Button>();
@@ -105,6 +105,8 @@ public class ProgressMenu : MonoBehaviour
             disableButton();
         }
         else enableButton();
+
+        FindObjectOfType<AudioManager>().Play(null, "gui");
     }
 
 
@@ -119,6 +121,8 @@ public class ProgressMenu : MonoBehaviour
             disableButton();
         }
         else enableButton();
+
+        FindObjectOfType<AudioManager>().Play(null, "gui");
     }
 
     public bool IsInteger(double d)

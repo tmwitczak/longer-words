@@ -47,6 +47,7 @@ public class GameplayManager : MonoBehaviour {
             spawnPowerUps();
             waveNumber++;
 
+            FindObjectOfType<AudioManager>().Play(null, "level");
         }
         // '''''''''''''''''''''''''''''''''''''''''''''''''''''' Get input
         foreach (char c in Input.inputString) {
@@ -57,20 +58,30 @@ public class GameplayManager : MonoBehaviour {
                 if (command.Length == 0) {
                     emptyWord = true;
                 }
+                FindObjectOfType<AudioManager>().Play(null, "delete-keyboard-input");
+
             }
             else if (c != ' ') {
                 if (mode == Mode.MoveAndLocate && c >= '0' && c <= '9') {
                     if (currentCommand.Length < 2) {
                         command += c;
+                        FindObjectOfType<AudioManager>().Play(null, "good-keyboard-input");
                     }
                 }
                 else if(mode == Mode.Attack) {
-                    // print (currentCommand.Length);
-                    // print( target.GetComponent<Enemy>().currentCommand.Length);
                     if (currentCommand.Length <
                         target.GetComponent<Enemy>().currentCommand.Length) {
                         command += c;
-                        
+
+                        if (target.GetComponent<Enemy>().currentCommand[command.Length - 1] == c) {
+                            FindObjectOfType<AudioManager>().Play(null, "good-keyboard-input");
+                        }
+                        else {
+                            FindObjectOfType<AudioManager>().Play(null, "bad-keyboard-input");
+                        }
+                    }
+                    else {
+                        FindObjectOfType<AudioManager>().Play(null, "bad-keyboard-input");
                     }
                 }
             }
@@ -82,6 +93,8 @@ public class GameplayManager : MonoBehaviour {
                     }
                     mode = Mode.MoveAndLocate;
                     command = "";
+
+                    FindObjectOfType<AudioManager>().Play(null, "bad-keyboard-input");
                 }
             }
         }
@@ -164,6 +177,8 @@ public class GameplayManager : MonoBehaviour {
             //levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);
             levelText.color = Color.green; //new Color(0.97f, 0.95f, 0.91f);
             previousProgress++;
+
+            FindObjectOfType<AudioManager>().Play(null, "skill");
 
         } 
         if (Input.GetKeyDown(KeyCode.Tab))

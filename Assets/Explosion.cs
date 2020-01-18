@@ -6,6 +6,9 @@ using UnityEngine;
 public class Explosion : MonoBehaviour {
     // ====================================== Private implementation < ==//
     // ------------------------------------------------ Behaviour << --==//
+    private void Start() {
+        FindObjectOfType<AudioManager>().Play(GetComponent<AudioSource>(), "explosion");
+    }
     private void Update() {
         timePassed = Mathf.Clamp(timePassed + Time.deltaTime,
                                  0.0f, duration);

@@ -9,11 +9,15 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        FindObjectOfType<AudioManager>().Play(null, "gui");
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void QuitGame()
     {
+        FindObjectOfType<AudioManager>().Play(null, "gui");
+
         Debug.Log("Quit");
         Application.Quit();
     }

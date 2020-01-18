@@ -14,6 +14,7 @@ public class FreezePowerUp : MonoBehaviour
         {
             StartCoroutine(PickUp(other));
             
+            FindObjectOfType<AudioManager>().Play(GetComponent<AudioSource>(), "power-up");
         }
     }
 

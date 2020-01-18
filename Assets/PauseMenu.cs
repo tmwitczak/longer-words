@@ -108,6 +108,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        FindObjectOfType<AudioManager>().Play(null, "gui");
+
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
@@ -115,6 +117,8 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        FindObjectOfType<AudioManager>().Play(null, "gui");
+
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
@@ -122,16 +126,17 @@ public class PauseMenu : MonoBehaviour
 
     public void loadMenu()
     {
+        FindObjectOfType<AudioManager>().Play(null, "gui");
+
         Time.timeScale = 1f;
 
-
         SceneManager.LoadScene(0);
-
-
     }
 
     public void QuitGame()
     {
+        FindObjectOfType<AudioManager>().Play(null, "gui");
+
         Debug.Log("Quit!");
         Application.Quit();
 

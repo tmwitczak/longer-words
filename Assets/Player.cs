@@ -20,12 +20,15 @@ public class Player : MonoBehaviour {
                                 fireball.GetComponent<Collider>());
         fireball.GetComponent<Rigidbody>().velocity = 1000.0f * direction 
                                                       * Time.deltaTime;
+
+        FindObjectOfType<AudioManager>().Play(GetComponents<AudioSource>()[0], "shoot");
     }
     // ====================================== Private implementation < ==//
     // ------------------------------------------------ Behaviour << --==//
     // ........................................ Initialization <<< ..--==//
     private void Awake() {
         SetupReferencesToComponents();
+        GetComponents<AudioSource>()[2].volume = 0.0f; 
     }
     private void SetupReferencesToComponents() {
         rigidbody = GetComponent<Rigidbody>();
@@ -38,6 +41,8 @@ public class Player : MonoBehaviour {
     }
     // ........................................... Update loop <<< ..--==//
     void Update() {
+        GetComponents<AudioSource>()[1].volume = 
+                Mathf.Clamp((rigidbody.velocity.magnitude / 5.0f), 0.0f, 0.1f);
         // '''''''''''''''''''''''''''''''''''''''''''''' Regenerate health
         health = Mathf.Clamp(health + 1.0f * Time.deltaTime,
                              minHealth, maxHealth);
@@ -66,13 +71,20 @@ public class Player : MonoBehaviour {
     void OnCollisionStay(Collision collision) {
         if (collision.gameObject.tag == "Enemy") {
             health -= 20 * Time.deltaTime;
+
+            GetComponents<AudioSource>()[2].volume = 1.0f; 
         }
+    }
+    void OnCollisionExit(Collision collision) {
+        GetComponents<AudioSource>()[2].volume = 0.0f; 
     }
 
 
     public void SavePlayer()
     {
         SaveSystem.SavePlayer(this);
+
+        FindObjectOfType<AudioManager>().Play(null, "gui");
     }
 
     public void LoadPlayer()
