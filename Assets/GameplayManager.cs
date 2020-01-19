@@ -157,7 +157,7 @@ public class GameplayManager : MonoBehaviour {
 
        // levelText.color = Color.red;
 
-        currentProgress = System.Math.Floor(correctLettersCount / 10);
+        currentProgress = System.Math.Floor(correctLettersCount / 50);
 
         levelText.text = "Upgrade (Tab) ";
         levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);

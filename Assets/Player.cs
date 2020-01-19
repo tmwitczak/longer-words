@@ -42,7 +42,7 @@ public class Player : MonoBehaviour {
     // ........................................... Update loop <<< ..--==//
     void Update() {
         GetComponents<AudioSource>()[1].volume = 
-                Mathf.Clamp((rigidbody.velocity.magnitude / 5.0f), 0.0f, 0.1f);
+                Mathf.Clamp((rigidbody.velocity.magnitude / 5.0f), 0.0f, 0.2f);
         // '''''''''''''''''''''''''''''''''''''''''''''' Regenerate health
         health = Mathf.Clamp(health + 1.0f * Time.deltaTime,
                              minHealth, maxHealth);
@@ -73,6 +73,9 @@ public class Player : MonoBehaviour {
             health -= 20 * Time.deltaTime;
 
             GetComponents<AudioSource>()[2].volume = 1.0f; 
+        }
+        else {
+            GetComponents<AudioSource>()[2].volume = 0.0f; 
         }
     }
     void OnCollisionExit(Collision collision) {
