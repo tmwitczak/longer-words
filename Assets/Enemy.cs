@@ -121,6 +121,7 @@ public class Enemy : MonoBehaviour {
         if (gameplayManager.mode == GameplayManager.Mode.Attack) {
             correctLetters = 0;
             notcorrectletters = 0;
+
         }
 
         for (int i = 0; i < currentCommand.Length; i++) {
@@ -138,13 +139,15 @@ public class Enemy : MonoBehaviour {
                     commandText.text += "#F2583E";
                     light.intensity -= 0.125f;
                     notcorrectletters++;
+                    
                 }
-
+                
                 destroy = false;
             }
             commandText.text += ">";
             commandText.text += currentCommand[i];
             commandText.text += "</color>";
+            
         }
 
         if (gameplayManager.mode == GameplayManager.Mode.Attack &&correctLetters == commands.attack.Length) {
@@ -156,7 +159,10 @@ public class Enemy : MonoBehaviour {
         }
         else {
             gameplayManager.emptyWord = false;
+
         }
+
+        
 
         // Render the UI
         Vector3 uiPos = Camera.main.WorldToScreenPoint(getAveragePosition());
@@ -311,6 +317,11 @@ public class Enemy : MonoBehaviour {
     {
         return notcorrectletters;
     }
+
+    public float getNotCorrectLettersCount()
+    {
+        return notcorrectlettersCount;
+    }
     // ----------------------------------------------------- Data << --==//
     // ............................................ Parameters <<< ..--==//
     [SerializeField] private GameObject uiTextPrefab;
@@ -335,6 +346,7 @@ public class Enemy : MonoBehaviour {
 
     float correctLetters = 0;
     float notcorrectletters = 0;
+    float notcorrectlettersCount = 0;
 
 
 

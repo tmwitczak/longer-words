@@ -35,7 +35,7 @@ public class GameplayManager : MonoBehaviour {
         new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
         levelText.transform.parent = GameObject.Find("Canvas").transform;
 
-        tutorialText = Instantiate(uiTextPrefabSmall,
+        tutorialText = Instantiate(uiTextPrefab,
                 new Vector3(0, 0, 0), Quaternion.identity).GetComponent<Text>();
         tutorialText.transform.parent = GameObject.Find("Canvas").transform;
     }
@@ -49,8 +49,11 @@ public class GameplayManager : MonoBehaviour {
 
         }
         // '''''''''''''''''''''''''''''''''''''''''''''''''''''' Get input
+
+
         foreach (char c in Input.inputString) {
             if (c == '\b') {
+                //notCorrectLettersCount++;
                 if (command.Length > 0) {
                     command = command.Substring(0, command.Length - 1);
                 }
@@ -79,6 +82,7 @@ public class GameplayManager : MonoBehaviour {
                     if (!emptyWord) {
                         // player.Attack(target.GetComponent<Enemy>().getAveragePosition());
                         notCorrectLettersCount += target.GetComponent<Enemy>().getNotCorrectLetters();
+
                     }
                     mode = Mode.MoveAndLocate;
                     command = "";
@@ -93,6 +97,7 @@ public class GameplayManager : MonoBehaviour {
         if (mode == Mode.Attack && allWordCorrect) {
             if (!emptyWord) {
                 correctLettersCount += target.GetComponent<Enemy>().getCorrectLetters();
+                
                 player.Attack(target.GetComponent<Enemy>().getAveragePosition());
                 
             }
@@ -121,33 +126,21 @@ public class GameplayManager : MonoBehaviour {
         // ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''' UI
         waveText.text = "Level " + waveNumber.ToString();
         if (mode == Mode.MoveAndLocate) {
-            waveText.text += " <i>| Move and locate</i>" + "                      Correct: " + correctLettersCount + "  Not correct: " + notCorrectLettersCount; 
+            waveText.text += " <i>| Move and locate</i>";
+            tutorialText.text = "  Correct: " + correctLettersCount + "  Not correct: " + notCorrectLettersCount; 
         }
         if (mode == Mode.Attack) {
             waveText.text += " <i>| Attack</i>";
         }
+        tutorialText.transform.position = new Vector3(2420, 50, 0);
         waveText.transform.position = new Vector3(1920 / 2 + 50, 50, 0);
         waveText.color = new Color(0.97f, 0.95f, 0.91f);
-
-        tutorialText.text = "blablabla";
-        //if (mode == Mode.MoveAndLocate)
-        //{
-        //    tutorialText.text += "Use <b>WASD</b> or <b>Arrow</b> keys to move\nEnter chosen enemy's number to locate him";
-        //}
-        //if (mode == Mode.Attack)
-        //{
-        //    tutorialText.text += "Enter chosen enemy's word to attack him\nPress <b>Space</b> or <b>Enter</b> to attack whenever you want to\n\n<i>(correctly typed letters induce damage,\nincorrectly typed ones - regenerate enemy's health</i>)";
-        //}
-        tutorialText.transform.position = new Vector3(1920 / 2 + 50, 50, 0);
-        tutorialText.color = new Color(0.97f, 0.95f, 0.91f);
-
 
        // levelText.color = Color.red;
 
         currentProgress = System.Math.Floor(correctLettersCount / 10);
-
-        levelText.text = "Upgrade (Tab) ";
-        levelText.transform.position = new Vector3(1920 / 2 + 50, 450, 0);
+        levelText.text = "Press [Tab] to upgrade";
+        levelText.transform.position = new Vector3(1920 / 2 + 50, 850, 0);
         //levelText.color = Color.red;
 
         if (currentProgress < previousProgress)
@@ -257,6 +250,7 @@ public class GameplayManager : MonoBehaviour {
 
     private Text tutorialText;
     public GameObject target;
+    public GameObject progressMenu;
 
 }
 // ///////////////////////////////////////////////////////////////////// //
