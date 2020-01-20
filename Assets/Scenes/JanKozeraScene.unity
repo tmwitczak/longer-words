@@ -720,6 +720,7 @@ MonoBehaviour:
   mode: 0
   command: 
   target: {fileID: 0}
+  progressMenu: {fileID: 0}
 --- !u!4 &305377214
 Transform:
   m_ObjectHideFlags: 0
@@ -1109,7 +1110,7 @@ GameObject:
   - component: {fileID: 566991342}
   m_Layer: 5
   m_Name: ProgressMenu
-  m_TagString: Untagged
+  m_TagString: ProgressMenu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1932,6 +1933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 577048ae0df7127459790bf43ad8dffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiTextPrefab: {fileID: 0}
   command: 
   pauseMenuUI: {fileID: 2144609956}
 --- !u!114 &950029106
@@ -1946,6 +1948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da08067fb1a178d44a207c0d055349be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiTextPrefab: {fileID: 0}
   progressMenuUI: {fileID: 566991340}
 --- !u!1 &1049822988
 GameObject:
@@ -3628,6 +3631,7 @@ GameObject:
   - component: {fileID: 2144609957}
   - component: {fileID: 2144609959}
   - component: {fileID: 2144609958}
+  - component: {fileID: 2144609960}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -3695,6 +3699,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144609956}
   m_CullTransparentMesh: 0
+--- !u!114 &2144609960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144609956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 577048ae0df7127459790bf43ad8dffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiTextPrefab: {fileID: 2716712077969970057, guid: 9459cc4263696504092b735675dd114b,
+    type: 3}
+  command: 
+  pauseMenuUI: {fileID: 0}
 --- !u!1001 &2660278067474902089
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,6 +12,8 @@ TagManager:
   - LocateNumber
   - GameplayManager
   - SpeedButton
+  - ProgressMenu
+  - CorrectLetters
   layers:
   - Default
   - TransparentFX

@@ -9,42 +9,86 @@ using UnityEngine.UI;
 
 public class ProgressMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject uiTextPrefab;
     public static bool GameIsPaused = false;
     public GameObject progressMenuUI;
     private Button buttonSpeed;
     private Button buttonHealth;
     private double currentLevel = 0; 
     private double previousLevel = 0; 
+    private double level = 0; 
+    private double pointsUsed = 0;
+    private double pointsToUse = 0;
+    private Text text;
+    public string command;
+
+
 
 
     void Start()
     {
         buttonSpeed = GetComponent<Button>();
         buttonHealth = GetComponent<Button>();
+
     }
-    // Update is called once per frame
-    void Update()
+
+    public double getPoints()
     {
-        
+        return pointsToUse;
+    }
+
+        // Update is called once per frame
+        void Update()
+    {
+
+        GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
+        currentLevel = System.Math.Floor(gameplayManager.getCorrectLettres() / 100);
+        pointsToUse = System.Math.Floor(gameplayManager.getCorrectLettres() / 100) - pointsUsed;
 
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (currentLevel > level)
+        {
+            if (PauseMenu.GameIsPaused == false)
             {
-            GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
-      
-
-            if (GameIsPaused)
+                if (Input.GetKeyDown(KeyCode.Tab))
                 {
-                    Resume();
+                    if (GameIsPaused)
+                    {
+                        Resume();
+                    }
+                    else
+                    {
+                        Pause();
+                    }
+                }
 
-                }
-                else
+                foreach (char c in Input.inputString)
                 {
-                    Pause();
+                    if (c == '\b' && command.Length != 0)
+                    {
+                        command = command.Substring(0, command.Length - 1);
+                    }
+                    else if ((c == '\n') || (c == '\r'))
+                    {
+                 
+                        if (command == "speed")
+                        {
+                            
+                            SpeedIncrease();
+                        }
+                        else if (command == "health")
+                        {
+                            HealthIncrease();
+                        }
+                        command = "";
+                    }
+                    else
+                    {
+                        command += c;
+                    }
                 }
-                        
+            }
         }
-
 
     }
     public void disableButton()
@@ -68,6 +112,7 @@ public class ProgressMenu : MonoBehaviour
         Time.timeScale = 1f;
         GameIsPaused = false;
         currentLevel = 0;
+        level++;
     }
 
     void Pause()
@@ -79,15 +124,17 @@ public class ProgressMenu : MonoBehaviour
 
         disableButton();    
         GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
-        currentLevel = System.Math.Floor(gameplayManager.getCorrectLettres() / 10);
-        Debug.Log(currentLevel);
-        Debug.Log(previousLevel);
-        if (currentLevel > previousLevel)
+        currentLevel = System.Math.Floor(gameplayManager.getCorrectLettres() / 100);
+        pointsToUse = System.Math.Floor(gameplayManager.getCorrectLettres() / 100) - pointsUsed;
+        //Debug.Log(currentLevel);
+        //Debug.Log(previousLevel);
+        if (pointsToUse >= 0)
         {
             enableButton();
             Debug.Log(currentLevel);
             Debug.Log(previousLevel);
-            //previousLevel++;
+            Debug.Log("pointsToUse = " + pointsToUse);
+
         }
         //else disableButton();
 
@@ -100,11 +147,13 @@ public class ProgressMenu : MonoBehaviour
             player.GetComponent<Player>().addVelocity(10.0f);
             previousLevel++;
             currentLevel--;
-        if (currentLevel <= previousLevel)
-        {
-            disableButton();
-        }
-        else enableButton();
+            pointsUsed++;
+            pointsToUse--;
+            if (pointsToUse <= 0)
+            {
+                disableButton();
+            }
+            else enableButton();
 
         FindObjectOfType<AudioManager>().Play(null, "gui");
     }
@@ -116,7 +165,9 @@ public class ProgressMenu : MonoBehaviour
         player.GetComponent<Player>().setHealth(player.GetComponent<Player>().getHealth() + 10, player.GetComponent<Player>().getMaxHealth() + 10);
         previousLevel++;
         currentLevel--;
-        if (currentLevel <= previousLevel)
+        pointsUsed++;
+        pointsToUse--;
+        if (pointsToUse <= 0)
         {
             disableButton();
         }

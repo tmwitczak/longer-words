@@ -8,75 +8,83 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private GameObject uiTextPrefab;
     public string command;
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
-
-
+    Text text;
+    private Text waveText;
+    
     float highScore = 0;
 
-
-    //Debug.Log(gameplayManager.GetComponent<GameplayManager>().getCorrectLettres()); 
-
-
-    // Update is called once per frame
-    void Update()
+        // Update is called once per frame
+        void Update()
     {
-        
-        if (Input.GetKeyDown(KeyCode.Escape) )
-        {
-            if (GameIsPaused)
-            {
-                    Resume();
-                
-            }
-            else
-            {
-                GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
-                Pause();
-                if(SaveSystem.LoadScore() == null)
-                {
-                    SaveSystem.SaveScore(0);
-                }
 
-                float score = gameplayManager.getCorrectLettres();
 
-                if (SaveSystem.LoadScore().getHighScore() < score)
-                {
-                    SaveSystem.SaveScore(score);
-                }
-               
-                Debug.Log("High Score = " + SaveSystem.LoadScore().getHighScore());
-       
-            }
-        }
-        foreach (char c in Input.inputString)
+        if (ProgressMenu.GameIsPaused == false)
         {
-            if (c == '\b' && command.Length != 0)
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
-                command = command.Substring(0, command.Length - 1);
-            }
-            else if ((c == '\n') || (c == '\r'))
-            {
-                if (command == "resume")
+                if (GameIsPaused)
                 {
                     Resume();
+                    //text.text = "";
                 }
-                else if (command == "menu")
+                else
                 {
+                    GameplayManager gameplayManager = GameObject.FindGameObjectWithTag("GameplayManager").GetComponent<GameplayManager>();
+                    Pause();
+                    if (SaveSystem.LoadScore() == null)
+                    {
+                        SaveSystem.SaveScore(0);
+                    }
 
-                    loadMenu();
+                    float score = gameplayManager.getCorrectLettres();
+
+                    if (SaveSystem.LoadScore().getHighScore() < score)
+                    {
+                        SaveSystem.SaveScore(score);
+                    }
+
+                    //text = FindObjectOfType<Text>().GetComponent<Text>();
+                    //text.text = "Correct letters: " + gameplayManager.getCorrectLettres();
+                    //text.transform.position = new Vector3(1920 / 2 + 50, 50, 0);
+                    //text.fontSize = 40;
+                    //text.fontStyle = FontStyle.Bold;
+
+                    Debug.Log("High Score = " + SaveSystem.LoadScore().getHighScore());
+
                 }
-                else if (command == "quit")
-                {
-                    QuitGame();
-                }
-                command = "";
             }
-            else
+            foreach (char c in Input.inputString)
             {
-                command += c;
-              
+                if (c == '\b' && command.Length != 0)
+                {
+                    command = command.Substring(0, command.Length - 1);
+                }
+                else if ((c == '\n') || (c == '\r'))
+                {
+                    if (command == "resume")
+                    {
+                        Resume();
+                    }
+                    else if (command == "menu")
+                    {
+
+                        loadMenu();
+                    }
+                    else if (command == "quit")
+                    {
+                        QuitGame();
+                    }
+                    command = "";
+                }
+                else
+                {
+                    command += c;
+
+                }
             }
         }
         //if (Input.GetKeyDown(KeyCode.R))
@@ -122,6 +130,8 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         GameIsPaused = true;
+        
+
     }
 
     public void loadMenu()
