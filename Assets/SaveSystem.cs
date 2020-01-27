@@ -9,7 +9,7 @@ public static class SaveSystem
     public static void SaveScore(float score)
     {
         BinaryFormatter formatter = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/score.txt";
+        string path = Application.persistentDataPath + "/score1.txt";
 
         FileStream stream = new FileStream(path, FileMode.Create);
 
@@ -21,7 +21,7 @@ public static class SaveSystem
 
     public static ScoreData LoadScore()
     {
-        string path = Application.persistentDataPath + "/score.txt";
+        string path = Application.persistentDataPath + "/score1.txt";
         if (File.Exists(path))
         {
             BinaryFormatter formatter = new BinaryFormatter();

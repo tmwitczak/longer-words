@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 // /////////////////////////////////////////////////////// Class: Player //
 public class Player : MonoBehaviour {
     // ============================================ Public interface < ==//
@@ -61,12 +62,24 @@ public class Player : MonoBehaviour {
             }
 
             Destroy(gameObject);
+
+                LoadMenu();
+
+            
+
         }
+            
         // '''''''''''''''''''''''''''''''''''''''''''''''''' Render the UI
         Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
         healthUI.transform.position = uiPos + new Vector3(0, 75, 0);
         healthUI.color = new Color(0.45f, 0.75f, 0.82f);
     }
+   
+    void LoadMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
     // ............................................ Collisions <<< ..--==//
     void OnCollisionStay(Collision collision) {
         if (collision.gameObject.tag == "Enemy") {
