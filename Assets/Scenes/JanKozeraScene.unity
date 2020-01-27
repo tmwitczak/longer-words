@@ -1950,6 +1950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiTextPrefab: {fileID: 0}
   progressMenuUI: {fileID: 566991340}
+  command: 
 --- !u!1 &1049822988
 GameObject:
   m_ObjectHideFlags: 0

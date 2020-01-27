@@ -48,7 +48,7 @@ public class Player : MonoBehaviour {
         health = Mathf.Clamp(health + 1.0f * Time.deltaTime,
                              minHealth, maxHealth);
         // ''''''''''''''''''''''''''''''''''''''''''''' Write health value
-        healthUI.text = "(" + ((int)health).ToString() + ")";
+        healthUI.text = "/" + ((int)health).ToString() + "/";
         // ''''''''''''''''''''''''''''''''''''''''''''''''''''''' End hame
         if (Mathf.Approximately(health, 0.0f)) {
             healthUI.text = "GAME OVER";
@@ -71,8 +71,9 @@ public class Player : MonoBehaviour {
             
         // '''''''''''''''''''''''''''''''''''''''''''''''''' Render the UI
         Vector3 uiPos = Camera.main.WorldToScreenPoint(transform.position);
-        healthUI.transform.position = uiPos + new Vector3(0, 75, 0);
-        healthUI.color = new Color(0.45f, 0.75f, 0.82f);
+        healthUI.transform.position = uiPos + new Vector3(75, 75, 0);
+        // healthUI.color = new Color(0.45f, 0.75f, 0.82f);
+        healthUI.color = new Color(1.0f, 0.82f, 0.68f);
     }
    
     void LoadMenu()

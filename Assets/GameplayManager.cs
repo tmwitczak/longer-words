@@ -140,12 +140,13 @@ public class GameplayManager : MonoBehaviour {
         waveText.text = "Level " + waveNumber.ToString();
         if (mode == Mode.MoveAndLocate) {
             //waveText.text += " <i>| Move and locate</i>";
-            tutorialText.text = "  Correct: " + correctLettersCount + "  Not correct: " + notCorrectLettersCount; 
+            tutorialText.text = "Correct / " + correctLettersCount + "\nIncorrect / " + notCorrectLettersCount; 
         }
         if (mode == Mode.Attack) {
             //waveText.text += " <i>| Attack</i>";
         }
-        tutorialText.transform.position = new Vector3(1850, 50, 0);
+        tutorialText.alignment = TextAnchor.MiddleRight;
+        tutorialText.transform.position = new Vector3(1920 / 2 - 50, 75, 0);
         waveText.transform.position = new Vector3(1920 / 2 + 50, 50, 0);
         waveText.color = new Color(0.97f, 0.95f, 0.91f);
 
