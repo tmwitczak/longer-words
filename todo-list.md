@@ -60,27 +60,13 @@
 
 ## 28 stycznia 2020 _(finalna ewaluacja projektu)_
 
--   _Zakres:_ **Marketing**
+-   _Zakres:_ **Marketing, Rozgrywka, Interfejs**
 
-    Do ustalenia
+    *   _Odpowiedzialny:_ **Jan Kozera**
+    *   _Zadanie:_ **Ostatnie poprawki**<br/><br/>
 
--   _Zakres:_ **Rozgrywka**
+    +   _Odpowiedzialny:_ **Stanisław Kozera**
+    +   _Zadanie:_ **Ostatnie poprawki**<br/><br/>
 
-    Do ustalenia
-
--   _Zakres:_ **Interfejs**
-
-    Do ustalenia
-
----
-
-## Do zrobienia
-
--   **Ustal spójną wizję na modele, tekstury, paletę kolorystyczną oraz post-processing**
--   **Zaspokój potrzeby gracza poprzez umieszczenie odpowiednich elementów w interfejsie (życie gracza i przeciwnika, statystyki rozgrywki, itp.)**
--   **Zaimplementuj postęp gracza w rozgrywce (np. okazjonalne zwiększanie obrażeń za dobrze wpisane wyrazy, może znacznie uproszczony system levelowania)**
--   **Rozszerz funkcjonalność klasy odpowiedzialnej za generowanie wyrazów do wpisania przez gracza**
--   **Dodaj zwiększający się poziom trudności gry wraz z jej postępem**
--   **Wykonaj kilka zrzutów ekranu z gry (najlepiej z wersji finalnej) i wstaw je na stronę internetową**
--   **Nagraj krótki gameplay z gry (najlepiej z wersji finalnej) i wstaw go na stronę internetową**
--   **Wstaw link do pobrania finalnej wersji gry na stronę internetową**
+    -   _Odpowiedzialny:_ **Tomasz Witczak**
+    -   _Zadanie:_ **Ostatnie poprawki**<br/><br/>
